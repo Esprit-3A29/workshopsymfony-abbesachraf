@@ -1,0 +1,9 @@
+<a href="http://127.0.0.1:8000/AjouterClassroom">+ADD</a>
+<br/>
+{% for s in tabclassroom %}
+id : {{s.id}}
+name : {{s.Name}}
+<a href="{{ path('ModifierClassroom', {'id': s.id}) }}">UPDATE</a>
+<a href="{{ path('SupprimerClassroom', {'id': s.id}) }}">DELETE</a>
+<br/>
+{% endfor %}

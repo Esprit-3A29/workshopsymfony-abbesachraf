@@ -2,11 +2,16 @@
 
 namespace App\Controller;
 
+use App\Entity\Classroom;
+use App\Form\ClassroomType;
+use App\Entity\Student;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\ClubRepository;
 use App\Repository\StudentRepository;
+use App\Repository\ClassroomRepository;
 
 class ClubController extends AbstractController
 {
@@ -51,10 +56,98 @@ class ClubController extends AbstractController
     }
 
 
-    #[Route('/students', name: 'app_students')]
+    #[Route('/students', name: 'liststudents')]
     public function listStudents(StudentRepository $repository)
     {
         $student=$repository->findAll();
         return $this->render("club/listStudent.html.twig",array ("tabStudent"=>$student));
     }
+
+    #[Route('/listclassroom', name: 'listclassroom')]
+    public function listclassroom(ClassroomRepository $repository)
+    {
+        $classroom=$repository->findAll();
+        return $this->render("club/listclassroom.html.twig",array ("tabclassroom"=>$classroom));
+    }
+    #[Route('/AjouterClassroom', name: 'AjouterClassroom')]
+    public function create(Request $request){
+        $class = new Classroom();
+        $form = $this->createForm(ClassroomType::class, $class);
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid()){
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($class);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('listclassroom');
+        }
+
+        return $this->render('club/AjouterClassroom.html.twig',[
+            'form' => $form->createView()
+        ]);
+    }
+
+    #[Route('/ModifierClassroom/{id}', name: 'ModifierClassroom')]
+
+    public function update(Request $request, $id){
+        $class = $this->getDoctrine()->getRepository(Classroom::class)->find($id);
+        $form = $this->createForm(ClassroomType::class, $class);
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid()){
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($class);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('listclassroom');
+        }
+
+        return $this->render('club/ModifierClassroom.html.twig',[
+            'form' => $form->createView()
+        ]);
+    }
+    
+
+    #[Route('/SupprimerClassroom/{id}', name: 'SupprimerClassroom')]
+
+    public function delete($id){
+        $class = $this->getDoctrine()->getRepository(Classroom::class)->find($id);
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->remove($class);
+        $entityManager->flush();
+        return $this->redirectToRoute('listclassroom');
+    }
+/*
+
+    #[Route('/AjouterStudent', name: 'AjouterStudent')]
+    public function createS(Request $request){
+        $class = new Student();
+        $form = $this->createForm(ClassroomType::class, $class);
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid()){
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($class);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('liststudents');
+        }
+
+        return $this->render('club/AjouterStudent.html.twig',[
+            'form' => $form->createView()
+        ]);
+    }
+
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+    
 }

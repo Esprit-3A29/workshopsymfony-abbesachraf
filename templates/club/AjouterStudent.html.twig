@@ -1,0 +1,22 @@
+{% block body %}
+<div class="container">
+    <div class="row">
+        <h3 class="mt-5 mb-5 offset-md-3">Create a new Classroom</h3>
+        <div class="col-md-6 offset-md-3">
+            {{ form_start(form) }}
+                <div class="form-group">
+                    {{ form_label(form.username) }}
+                    {{ form_widget(form.username,{'attr':{'class':'form-control'}}) }}
+                </div>
+                <div class="form-group">
+                    {{ form_label(form.moyenne) }}
+                    {{ form_widget(form.moyenne,{'attr':{'class':'form-control'}}) }}
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-info mt-2 text-white">Submit</button>
+                </div>
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div>
+{% endblock %}

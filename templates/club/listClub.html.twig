@@ -1,11 +1,11 @@
-<a href="#">+ADD</a>
+<a href="http://127.0.0.1:8000/AjouterClub">+ADD</a>
 <br/>
-{% for c in tabClub %}
-id : {{c.id}}
-name : {{c.name}}
-Description : {{c.description}}
-adress : {{c.adress}}
-<a href="#">UPDATE</a>
-<a href="#">DELETE</a>
+{% for s in tabClub %}
+id : {{s.id}}
+name : {{s.Name}}
+Description : {{s.Description}}
+adress : {{s.adress}}
+<a href="{{ path('ModifierClub', {'id': s.id}) }}">UPDATE</a>
+<a href="{{ path('SupprimerClub', {'id': s.id}) }}">DELETE</a>
 <br/>
 {% endfor %}

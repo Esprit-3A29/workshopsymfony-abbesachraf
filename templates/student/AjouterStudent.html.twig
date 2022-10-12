@@ -1,9 +1,13 @@
 {% block body %}
 <div class="container">
     <div class="row">
-        <h3 class="mt-5 mb-5 offset-md-3">Create a new Classroom</h3>
+        <h3 class="mt-5 mb-5 offset-md-3">Create a new Student</h3>
         <div class="col-md-6 offset-md-3">
             {{ form_start(form) }}
+                <div class="form-group">
+                    {{ form_label(form.nce) }}
+                    {{ form_widget(form.nce,{'attr':{'class':'form-control'}}) }}
+                </div>
                 <div class="form-group">
                     {{ form_label(form.username) }}
                     {{ form_widget(form.username,{'attr':{'class':'form-control'}}) }}

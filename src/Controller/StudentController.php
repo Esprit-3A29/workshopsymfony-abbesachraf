@@ -87,4 +87,29 @@ class StudentController extends AbstractController
         $entityManager->flush();
         return $this->redirectToRoute('listStudent');
     }
+
+
+
+    #[Route('/AjouterStudent2', name: 'AjouterStudent2')]
+    public function add(Request $request , StudentRepository $repository){
+        $student = new Student();
+        $form = $this->createForm(StudentType::class, $student);
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid()){
+            $repository->add($student ,true);
+
+            return $this->redirectToRoute('listStudent');
+        }
+
+        return $this->renderForm('student/AjouterStudent2.html.twig',array ("tabStudent"=>$form));
+    }
+
+    #[Route('/SupprimerStudent2/{id}', name: 'SupprimerStudent')]
+
+    public function delete2($id, StudentRepository $repository){
+        $student = $this->getDoctrine()->getRepository(Student::class)->find($id);
+        $repository->remove($student ,true);
+        return $this->redirectToRoute('listStudent');
+    }
+
 }

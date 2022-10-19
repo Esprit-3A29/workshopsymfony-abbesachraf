@@ -2,6 +2,8 @@
 
 namespace App\Form;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+
 use App\Entity\Student;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -15,6 +17,8 @@ class StudentType extends AbstractType
             ->add('nce')
             ->add('username')
             ->add('moyenne')
+            ->add('classroom')
+            ->add('submit',SubmitType::class);
         ;
     }
 

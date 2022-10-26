@@ -9,6 +9,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\StudentRepository;
+use App\Repository\ClassroomRepository;
+use App\Form\SearchStudentType;
 
 class StudentController extends AbstractController
 {
@@ -110,6 +112,40 @@ class StudentController extends AbstractController
         $student = $this->getDoctrine()->getRepository(Student::class)->find($id);
         $repository->remove($student ,true);
         return $this->redirectToRoute('listStudent');
+    }
+    #[Route('/showClassroom/{id}', name: 'showClassroom')]
+    public function showClassroom(StudentRepository $repo,$id,ClassroomRepository $repository)
+    {
+        $classroom = $repository->find($id);
+       $students= $repo->getStudentsByClassroom($id);
+        return $this->render("classroom/showClassroom.html.twig",array(
+            'showClassroom'=>$classroom,
+            'tabStudent'=>$students
+        ));
+    }
+    #[Route('/listStudent', name: 'list_student')]
+    public function listStudentss(Request $request,StudentRepository $repository)
+    {
+        $students= $repository->findAll();
+       // $students= $this->getDoctrine()->getRepository(StudentRepository::class)->findAll();
+        $sortByMoyenne= $repository->sortByMoyenne();
+       $formSearch= $this->createForm(SearchStudentType::class);
+       $formSearch->handleRequest($request);
+       $topStudents= $repository->topStudent();
+       if($formSearch->isSubmitted()){
+           $nce= $formSearch->get('nce')->getData();
+           //var_dump($nce).die();
+           $result= $repository->searchStudent($nce);
+           return $this->renderForm("student/list.html.twig",
+               array("tabStudent"=>$result,
+                   "sortByMoyenne"=>$sortByMoyenne,
+                   "searchForm"=>$formSearch));
+       }
+         return $this->renderForm("student/list.html.twig",
+           array("tabStudent"=>$students,
+               "sortByMoyenne"=>$sortByMoyenne,
+                "searchForm"=>$formSearch,
+               'topStudents'=>$topStudents));
     }
 
 }
